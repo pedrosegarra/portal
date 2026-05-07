@@ -261,7 +261,6 @@ def render_cicle(cicle_id, data, is_first):
 
 # ── INJECT INTO HTML ──────────────────────────────────────────────────────────
 
-
 def inject(html, data):
     today = date.today().isoformat()
     # Actualizar fecha de sync
@@ -271,20 +270,17 @@ def inject(html, data):
         for curs_id, c in cicle["cursos"].items():
             for mod_id in c["mods"]:
                 profs = data[cicle_id][curs_id][mod_id]
+                if mod_id == 'asir1-par':
+                    test = re.search(rf"id:'{re.escape(mod_id)}'", html)
+                    if test:
+                        print(f"  ENCONTRADO en pos {test.start()}")
+                        print(f"  >>>{html[test.start():test.start()+100]}<<<")
+                    else:
+                        print(f"  NO ENCONTRADO: {mod_id}")
                 if profs:
                     profs_js = ','.join(
                         f"{{user:'{p['user']}',url:'{p['url']}'}}"
-                        for p in profs
-                    )
-                else:
-                    profs_js = ''
-                # Sustituir profs:[] o profs:[{...}] por los nuevos datos
-                html = re.sub(
-                    rf"(\{{id:'{re.escape(mod_id)}',[^}}]*profs:)\[[^\]]*\]",
-                    rf"\g<1>[{profs_js}]",
-                    html
-                )
-    return html
+                        for p in prof
 
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 def main():
