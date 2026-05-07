@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ca">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,544 +7,510 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:        #f7f6f3;
-    --surface:   #ffffff;
-    --border:    #e4e2db;
-    --border-md: #ccc9bf;
-    --text:      #1a1916;
-    --muted:     #7a7870;
-    --hint:      #b0aea6;
-    --accent:    #1a1916;
-
-    --asir: #1d4ed8; --asir-bg: #eff6ff; --asir-txt: #1e3a8a;
-    --daw:  #15803d; --daw-bg:  #f0fdf4; --daw-txt:  #14532d;
-    --smr:  #b45309; --smr-bg:  #fffbeb; --smr-txt:  #92400e;
-    --ce:   #7c3aed; --ce-bg:   #f5f3ff; --ce-txt:   #4c1d95;
-
-    --mat-bg:  #ecfdf5; --mat-txt: #065f46;
-    --nomat-bg: #f5f5f4; --nomat-txt: #78716c;
-
-    --radius-sm: 6px;
-    --radius-md: 10px;
-    --radius-lg: 14px;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 14px;
-    line-height: 1.5;
-    min-height: 100vh;
-  }
-
-  /* ── LAYOUT ── */
-  .shell {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 0 1.25rem 4rem;
-  }
-
-  /* ── HEADER ── */
-  header {
-    padding: 2rem 0 1.5rem;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-  .brand { display: flex; align-items: center; gap: 12px; }
-  .brand-logo {
-    width: 42px; height: 42px;
-    background: var(--accent);
-    border-radius: var(--radius-md);
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-  }
-  .brand-logo svg { display: block; }
-  .brand-name {
-    font-size: 15px; font-weight: 500; letter-spacing: -0.01em;
-    color: var(--text);
-  }
-  .brand-sub { font-size: 12px; color: var(--muted); margin-top: 1px; }
-
-  .gh-btn {
-    display: flex; align-items: center; gap: 6px;
-    font-family: inherit; font-size: 12px; font-weight: 400;
-    color: var(--muted);
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 6px 10px;
-    text-decoration: none;
-    transition: color .15s, border-color .15s;
-    flex-shrink: 0;
-  }
-  .gh-btn:hover { color: var(--text); border-color: var(--border-md); }
-
-  /* ── SEARCH + STATS ── */
-  .toolbar {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 1.5rem;
-  }
-  .search-wrap {
-    flex: 1; position: relative;
-  }
-  .search-wrap svg {
-    position: absolute; left: 10px; top: 50%;
-    transform: translateY(-50%);
-    color: var(--hint); pointer-events: none;
-  }
-  #q {
-    width: 100%;
-    padding: 8px 12px 8px 34px;
-    font-family: inherit; font-size: 13px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text);
-    outline: none;
-    transition: border-color .15s;
-  }
-  #q:focus { border-color: var(--border-md); }
-  #q::placeholder { color: var(--hint); }
-
-  .stats {
-    display: flex; gap: 6px; flex-shrink: 0;
-  }
-  .stat {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 5px 10px;
-    text-align: center;
-    white-space: nowrap;
-  }
-  .stat-n { font-size: 15px; font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; }
-  .stat-l { font-size: 10px; color: var(--muted); margin-top: 1px; }
-
-  /* ── SYNC INFO ── */
-  .sync-bar {
-    font-size: 11px; color: var(--hint);
-    margin-bottom: 1.25rem;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .sync-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #22c55e; flex-shrink: 0;
-  }
-
-  /* ── CICLE ── */
-  .ciclo {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    margin-bottom: 10px;
-    overflow: hidden;
-  }
-
-  .ciclo-hdr {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 13px 16px;
-    cursor: pointer; user-select: none;
-    gap: 12px;
-  }
-  .ciclo-hdr:hover { background: #faf9f6; }
-
-  .ciclo-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
-
-  .ciclo-pill {
-    font-size: 10px; font-weight: 500;
-    padding: 3px 9px; border-radius: 99px;
-    letter-spacing: 0.04em; flex-shrink: 0;
-    font-family: 'DM Mono', monospace;
-  }
-  .pill-asir { background: var(--asir-bg); color: var(--asir-txt); }
-  .pill-daw  { background: var(--daw-bg);  color: var(--daw-txt); }
-  .pill-smr  { background: var(--smr-bg);  color: var(--smr-txt); }
-  .pill-ce   { background: var(--ce-bg);   color: var(--ce-txt); }
-
-  .ciclo-name {
-    font-size: 13px; font-weight: 500;
-    color: var(--text); white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis;
-  }
-  .ciclo-meta { font-size: 11px; color: var(--hint); flex-shrink: 0; }
-
-  .ciclo-right { display: flex; align-items: center; gap: 10px; }
-
-  .chev {
-    width: 16px; height: 16px; color: var(--hint);
-    transition: transform .2s; flex-shrink: 0;
-  }
-  .ciclo.open .ciclo-hdr .chev { transform: rotate(180deg); }
-
-  .ciclo-body { display: none; border-top: 1px solid var(--border); }
-  .ciclo.open .ciclo-body { display: block; }
-
-  /* ── CURS ── */
-  .curs { border-bottom: 1px solid var(--border); }
-  .curs:last-child { border-bottom: none; }
-
-  .curs-hdr {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 9px 16px 9px 24px;
-    cursor: pointer; user-select: none;
-  }
-  .curs-hdr:hover { background: #faf9f6; }
-  .curs-label {
-    font-size: 11px; font-weight: 500; color: var(--muted);
-    text-transform: uppercase; letter-spacing: 0.07em;
-    font-family: 'DM Mono', monospace;
-  }
-  .curs-meta { font-size: 11px; color: var(--hint); display: flex; align-items: center; gap: 8px; }
-  .curs.open .curs-hdr .chev { transform: rotate(180deg); }
-
-  .mods-grid {
-    display: none;
-    grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
-    gap: 8px;
-    padding: 8px 16px 14px 24px;
-  }
-  .curs.open .mods-grid { display: grid; }
-
-  /* ── MÒDUL ── */
-  .mod {
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 11px 13px;
-    background: var(--surface);
-    cursor: default;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  .mod:hover { border-color: var(--border-md); }
-
-  .mod-top {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 5px;
-  }
-  .mod-code {
-    font-size: 10px; color: var(--hint);
-    font-family: 'DM Mono', monospace;
-  }
-  .badge {
-    font-size: 9px; font-weight: 500;
-    padding: 2px 7px; border-radius: 99px;
-  }
-  .badge-si { background: var(--mat-bg); color: var(--mat-txt); }
-  .badge-no { background: var(--nomat-bg); color: var(--nomat-txt); }
-
-  .mod-name {
-    font-size: 12px; font-weight: 500;
-    color: var(--text); line-height: 1.35;
-    margin-bottom: 9px;
-  }
-
-  .prof-chips { display: flex; flex-wrap: wrap; gap: 4px; min-height: 22px; }
-
-  .chip {
-    display: flex; align-items: center; gap: 4px;
-    font-size: 10px; color: var(--muted);
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    padding: 2px 7px 2px 2px;
-    text-decoration: none;
-    transition: border-color .15s, color .15s;
-    white-space: nowrap;
-  }
-  .chip:hover { border-color: var(--border-md); color: var(--text); }
-  .chip-av {
-    width: 16px; height: 16px; border-radius: 50%;
-    background: #e0e7ff; color: #3730a3;
-    font-size: 8px; font-weight: 500;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; font-family: 'DM Mono', monospace;
-  }
-
-  /* ── EMPTY ── */
-  .empty {
-    text-align: center; padding: 3rem 1rem;
-    font-size: 13px; color: var(--hint);
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    margin-top: 2.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    font-size: 11px; color: var(--hint);
-  }
-  footer a { color: var(--hint); text-decoration: none; }
-  footer a:hover { color: var(--muted); }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    .stats { display: none; }
-    .ciclo-name { font-size: 12px; }
-  }
+:root{--bg:#f7f6f3;--surface:#fff;--border:#e4e2db;--border-md:#ccc9bf;--text:#1a1916;--muted:#7a7870;--hint:#b0aea6}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh}
+a{text-decoration:none}
+.shell{max-width:980px;margin:0 auto;padding:0 1.25rem 4rem}
+header{padding:1.75rem 0 1.25rem;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:40px;height:40px;border-radius:10px;background:#1a1916;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand-name{font-size:15px;font-weight:500;letter-spacing:-.01em}
+.brand-sub{font-size:12px;color:var(--muted);margin-top:1px}
+.hdr-right{display:flex;align-items:center;gap:8px}
+.lang-btn{display:flex;border:1px solid var(--border-md);border-radius:8px;overflow:hidden}
+.lang-opt{padding:5px 11px;font-size:11px;font-weight:500;cursor:pointer;background:transparent;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;transition:background .12s,color .12s}
+.lang-opt.active{background:var(--text);color:var(--bg)}
+.gh-btn{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 10px;transition:color .15s,border-color .15s}
+.gh-btn:hover{color:var(--text);border-color:var(--border-md)}
+.stats{display:flex;gap:6px;margin-bottom:1rem}
+.stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 12px;text-align:center}
+.stat-n{font-size:18px;font-weight:500;font-family:'DM Mono',monospace}
+.stat-l{font-size:10px;color:var(--muted);margin-top:1px}
+.search-wrap{position:relative;margin-bottom:.75rem}
+.search-wrap svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--hint);pointer-events:none}
+#q{width:100%;padding:8px 12px 8px 34px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);outline:none;transition:border-color .15s}
+#q:focus{border-color:var(--border-md)}
+#q::placeholder{color:var(--hint)}
+.sync{font-size:11px;color:var(--hint);display:flex;align-items:center;gap:5px;margin-bottom:1.5rem}
+.sync-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0}
+.section-label{font-size:10px;font-weight:500;letter-spacing:.07em;color:var(--muted);text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+.cycle-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-bottom:2rem}
+.card{border-radius:12px;padding:1.1rem;border-width:1px;border-style:solid}
+.icon-box{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem}
+.card-name{font-size:.88rem;font-weight:500;line-height:1.3;margin-bottom:.15rem}
+.card-abrev{font-size:.72rem;margin-bottom:.8rem}
+.dual-badge{display:flex;gap:.35rem;margin-bottom:.6rem}
+.dbadge{font-size:.68rem;font-weight:600;padding:.15rem .5rem;border-radius:20px}
+.card-divider{border-top-width:1px;border-top-style:solid;padding-top:.6rem;display:flex;flex-direction:column;gap:.3rem}
+.curso-btn{width:100%;font-size:.78rem;display:flex;justify-content:space-between;align-items:center;padding:.32rem .55rem;border-radius:6px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s}
+.curso-btn:hover{opacity:.8}
+.arrow{transition:transform .2s;display:inline-block}
+.arrow.open{transform:rotate(90deg)}
+.modulos{overflow:hidden;max-height:0;transition:max-height .3s ease}
+.modulos.open{max-height:900px}
+.modulos-inner{padding:.35rem 0 .1rem;display:flex;flex-direction:column;gap:1px}
+.mod-item{display:flex;justify-content:space-between;align-items:center;padding:.26rem .55rem;font-size:.76rem;border-radius:5px;transition:opacity .15s}
+.mod-item:hover{opacity:.75}
+.mod-left{display:flex;align-items:center;gap:5px;flex:1;min-width:0}
+.mod-name-txt{flex:1}
+.badge-mat{font-size:.63rem;font-weight:500;padding:.1rem .4rem;border-radius:99px;white-space:nowrap;flex-shrink:0}
+.empty{text-align:center;padding:3rem;font-size:13px;color:var(--hint);display:none}
+footer{margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--hint)}
+footer a{color:var(--hint)}
+footer a:hover{color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="shell">
 
-  <header>
-    <div class="brand">
-      <div class="brand-logo">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-        </svg>
-      </div>
-      <div>
-        <div class="brand-name">Portal de Materials · IES El Caminas</div>
-        <div class="brand-sub">Materials didàctics per cicle, curs i mòdul</div>
-      </div>
+<header>
+  <div class="brand">
+    <div class="logo">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+    </div>
+    <div>
+      <div class="brand-name" id="brand-name">Portal de Materials · IES El Caminas</div>
+      <div class="brand-sub" id="brand-sub">Materials didàctics per cicle, curs i mòdul</div>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="lang-btn">
+      <button class="lang-opt active" onclick="setLang('ca')">VAL</button>
+      <button class="lang-opt" onclick="setLang('es')">CAS</button>
     </div>
     <a href="https://github.com/pedrosegarra" class="gh-btn" target="_blank" rel="noopener">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.202 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
       pedrosegarra
     </a>
-  </header>
-
-  <div class="toolbar">
-    <div class="search-wrap">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" id="q" placeholder="Cercar mòdul, codi o professor…" autocomplete="off" />
-    </div>
-    <div class="stats" id="stats">
-      <div class="stat"><div class="stat-n" id="st-cicles">4</div><div class="stat-l">cicles</div></div>
-      <div class="stat"><div class="stat-n" id="st-mods">14</div><div class="stat-l">mòduls</div></div>
-      <div class="stat"><div class="stat-n" id="st-mat">9</div><div class="stat-l">amb material</div></div>
-    </div>
   </div>
+</header>
 
-  <div class="sync-bar">
-    <div class="sync-dot"></div>
-    Actualitzat automàticament des de GitHub · <span id="sync-date">—</span>
-  </div>
+<div class="stats">
+  <div class="stat"><div class="stat-n">7</div><div class="stat-l" id="sl-cicles">cicles</div></div>
+  <div class="stat"><div class="stat-n" id="sl-n-mods">0</div><div class="stat-l" id="sl-mods">mòduls</div></div>
+  <div class="stat"><div class="stat-n" id="sl-n-mat">0</div><div class="stat-l" id="sl-mat">amb material</div></div>
+</div>
 
-  <div id="cicles-container"></div>
-  <div class="empty" id="empty" style="display:none">Cap resultat per a aquesta cerca.</div>
+<div class="search-wrap">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+  <input type="text" id="q" placeholder="Cercar mòdul, cicle o professor…" autocomplete="off">
+</div>
 
-  <footer>
-    <span>IES El Caminas · Castelló de la Plana</span>
-    <a href="https://github.com/pedrosegarra" target="_blank" rel="noopener">github.com/pedrosegarra</a>
-  </footer>
+<div class="sync">
+  <div class="sync-dot"></div>
+  <span id="sync-txt">Actualitzat automàticament des de GitHub</span> · <span id="sync-date">2026-05-07</span>
+</div>
 
+<div id="portal"></div>
+<div class="empty" id="empty">Cap resultat per a aquesta cerca.</div>
+
+<footer>
+  <span>IES El Caminas · Castelló de la Plana</span>
+  <a href="https://github.com/pedrosegarra" target="_blank" rel="noopener">github.com/pedrosegarra</a>
+</footer>
 </div>
 
 <script>
-// ─────────────────────────────────────────────
-// DADES — generades automàticament per la GitHub Action
-// ─────────────────────────────────────────────
-const SYNC_DATE = "2026-05-06";
-
-const CICLES = [
-  {
-    id: "asir", nom: "Administració de Sistemes Informàtics en Xarxa",
-    pill: "ASIR", pillClass: "pill-asir",
-    cursos: [
-      {
-        label: "1r curs", id: "asir1",
-        mods: [
-          { codi: "0370", abrev: "PAX", nom: "Planificació i Administració de Xarxes",
-            profs: [{ user: "p.esteban", url: "https://p-esteban.github.io/asir1-par" }] },
-          { codi: "0369", abrev: "GBD", nom: "Gestió de Bases de Dades", profs: [] },
-          { codi: "0371", abrev: "FHW", nom: "Fonaments de Maquinari",
-            profs: [{ user: "m.segarra", url: "https://m-segarra.github.io/asir1-fhw" }] },
-        ]
-      },
-      {
-        label: "2n curs", id: "asir2",
-        mods: [
-          { codi: "0374", abrev: "SAD", nom: "Seguretat i Alta Disponibilitat",
-            profs: [{ user: "m.segarra", url: "https://m-segarra.github.io/asir2-sad" }] },
-          { codi: "0378", abrev: "IAW", nom: "Implantació d'Aplicacions Web",
-            profs: [
-              { user: "a.ventura", url: "https://a-ventura.github.io/asir2-iaw" },
-              { user: "j.molina",  url: "https://j-molina.github.io/asir2-iaw" }
-            ]},
-          { codi: "0376", abrev: "SRI", nom: "Serveis de Xarxa i Internet", profs: [] },
-        ]
-      }
-    ]
+// ════════════════════════════════════════════════════════════
+// TRADUCCIONS
+// ════════════════════════════════════════════════════════════
+const T = {
+  ca:{
+    brandName:'Portal de Materials · IES El Caminas',
+    brandSub:'Materials didàctics per cicle, curs i mòdul',
+    cicles:'cicles',mods:'mòduls',mat:'amb material',
+    sync:'Actualitzat automàticament des de GitHub',
+    ph:'Cercar mòdul, cicle o professor…',
+    empty:'Cap resultat per a aquesta cerca.',
+    gm:'Cicles Formatius de Grau Mitjà',
+    gs:'Cicles Formatius de Grau Superior',
+    ce:"Cursos d'Especialització",
+    c1:'1r curs',c2:'2n curs',cm:'Mòduls',
+    smr:'Sistemes Microinformàtics i Xarxes',
+    asir:"Administració de Sistemes Informàtics en Xarxa",
+    shared:'1r curs compartit (DAW · DAM)',
+    daw:"Desenvolupament d'Aplicacions Web",
+    dam:"Desenvolupament d'Aplicacions Multiplataforma",
+    ciber:'Ciberseguretat en entorns de les TI',
+    vj:'Videojocs i Realitat Virtual',
+    ia:"Intel·ligència Artificial i Big Data",
+    'smr1-montaje':"Muntatge i Manteniment d'Equips",
+    'smr1-so-mono':'Sistemes Operatius Monopuesto',
+    'smr1-redes':'Xarxes Locals',
+    'smr1-ofimatica':'Aplicacions Ofimàtiques',
+    'smr1-fol':'Formació i Orientació Laboral',
+    'smr2-so-red':'Sistemes Operatius en Xarxa',
+    'smr2-seguridad':'Seguretat Informàtica',
+    'smr2-servicios':'Serveis en Xarxa',
+    'smr2-web':'Aplicacions Web',
+    'smr2-eie':'Empresa i Iniciativa Emprenedora',
+    'asir1-iso':'Implantació de Sistemes Operatius',
+    'asir1-par':'Planificació i Administració de Xarxes',
+    'asir1-fhw':'Fonaments de Maquinari',
+    'asir1-gbd':'Gestió de Bases de Dades',
+    'asir1-lmsgi':'Llenguatges de Marques i SGI',
+    'asir1-fol':'Formació i Orientació Laboral',
+    'asir2-aso':'Administració de Sistemes Operatius',
+    'asir2-sri':'Serveis de Xarxa i Internet',
+    'asir2-iaw':"Implantació d'Aplicacions Web",
+    'asir2-asgbd':'Administració de SGBD',
+    'asir2-sad':'Seguretat i Alta Disponibilitat',
+    'asir2-eie':'Empresa i Iniciativa Emprenedora',
+    'asir2-proyecto':'Projecte ASIR',
+    'shared1-si':'Sistemes Informàtics',
+    'shared1-bd':'Bases de Dades',
+    'shared1-prog':'Programació',
+    'shared1-lmsgi':'Llenguatges de Marques i SGI',
+    'shared1-ed':'Entorns de Desenvolupament',
+    'shared1-fol':'Formació i Orientació Laboral',
+    'daw2-dwec':'Desenvolupament Web en Entorn Client',
+    'daw2-dwes':'Desenvolupament Web en Entorn Servidor',
+    'daw2-daw':"Desplegament d'Aplicacions Web",
+    'daw2-diw':"Disseny d'Interfícies Web",
+    'daw2-eie':'Empresa i Iniciativa Emprenedora',
+    'daw2-proyecto':'Projecte DAW',
+    'dam2-ad':'Accés a Dades',
+    'dam2-di':"Desenvolupament d'Interfícies",
+    'dam2-pmdm':'Programació Multidispositiu',
+    'dam2-psp':'Programació de Serveis i Processos',
+    'dam2-sge':'Sistemes de Gestió Empresarial',
+    'dam2-eie':'Empresa i Iniciativa Emprenedora',
+    'dam2-proyecto':'Projecte DAM',
+    'ciber-incidentes':'Incidents de Ciberseguretat',
+    'ciber-bastionado':'Bastionament de Xarxes i Sistemes',
+    'ciber-produccion':'Posada en Producció Segura',
+    'ciber-forense':'Anàlisi Forense Informàtic',
+    'ciber-hacking':'Hacking Ètic',
+    'ciber-normativa':'Normativa de Ciberseguretat',
+    'vj-motores':'Programació i Motors de Videojocs',
+    'vj-graficos':'Disseny Gràfic 2D i 3D',
+    'vj-red-ia':'Programació en Xarxa i IA',
+    'vj-realidad-virtual':'Realitat Virtual i Augmentada',
+    'vj-gestion':'Gestió, Publicació i Producció',
+    'ia-modelos':"Models d'Intel·ligència Artificial",
+    'ia-aprendizaje':"Sistemes d'Aprenentatge Automàtic",
+    'ia-programacion':"Programació d'IA",
+    'ia-bigdata':'Sistemes de Big Data',
+    'ia-bigdata-aplicado':'Big Data Aplicat',
   },
-  {
-    id: "daw", nom: "Desenvolupament d'Aplicacions Web",
-    pill: "DAW", pillClass: "pill-daw",
-    cursos: [
-      {
-        label: "1r curs", id: "daw1",
-        mods: [
-          { codi: "0612", abrev: "DWEC", nom: "Desenvolupament Web en Entorn Client",
-            profs: [{ user: "l.cases", url: "https://l-cases.github.io/daw1-dwec" }] },
-          { codi: "0373", abrev: "LND",  nom: "Llenguatges de Marques", profs: [] },
-        ]
-      },
-      {
-        label: "2n curs", id: "daw2",
-        mods: [
-          { codi: "0613", abrev: "DWES", nom: "Desenvolupament Web en Entorn Servidor",
-            profs: [{ user: "r.garcia", url: "https://r-garcia.github.io/daw2-dwes" }] },
-          { codi: "0614", abrev: "DIW",  nom: "Disseny d'Interfícies Web", profs: [] },
-        ]
-      }
-    ]
-  },
-  {
-    id: "smr", nom: "Sistemes Microinformàtics i Xarxes",
-    pill: "SMR", pillClass: "pill-smr",
-    cursos: [
-      {
-        label: "1r curs", id: "smr1",
-        mods: [
-          { codi: "0221", abrev: "SOI", nom: "Sistemes Operatius en Xarxa",
-            profs: [{ user: "p.esteban", url: "https://p-esteban.github.io/smr1-soi" }] },
-          { codi: "0222", abrev: "RLO", nom: "Xarxes Locals", profs: [] },
-        ]
-      },
-      {
-        label: "2n curs", id: "smr2",
-        mods: [
-          { codi: "0223", abrev: "AMS", nom: "Aplicacions i Serveis en Xarxa",
-            profs: [{ user: "m.segarra", url: "https://m-segarra.github.io/smr2-ams" }] },
-          { codi: "0224", abrev: "SOC", nom: "Sistemes Operatius en Xarxa Avançat", profs: [] },
-        ]
-      }
-    ]
-  },
-  {
-    id: "ce", nom: "Curs d'Especialització",
-    pill: "CE", pillClass: "pill-ce",
-    cursos: [
-      {
-        label: "Mòduls", id: "ce1",
-        mods: [
-          { codi: "5167", abrev: "DES", nom: "Desplegament de Programari",
-            profs: [{ user: "p.esteban", url: "https://p-esteban.github.io/ce-des" }] },
-          { codi: "5169", abrev: "MON", nom: "Monitoratge i Seguretat", profs: [] },
-        ]
-      }
-    ]
+  es:{
+    brandName:'Portal de Materiales · IES El Caminas',
+    brandSub:'Materiales didácticos por ciclo, curso y módulo',
+    cicles:'ciclos',mods:'módulos',mat:'con material',
+    sync:'Actualizado automáticamente desde GitHub',
+    ph:'Buscar módulo, ciclo o profesor…',
+    empty:'Sin resultados para esta búsqueda.',
+    gm:'Ciclos Formativos de Grado Medio',
+    gs:'Ciclos Formativos de Grado Superior',
+    ce:'Cursos de Especialización',
+    c1:'1º curso',c2:'2º curso',cm:'Módulos',
+    smr:'Sistemas Microinformáticos y Redes',
+    asir:'Administración de Sistemas Informáticos en Red',
+    shared:'1º curso compartido (DAW · DAM)',
+    daw:'Desarrollo de Aplicaciones Web',
+    dam:'Desarrollo de Aplicaciones Multiplataforma',
+    ciber:'Ciberseguridad en entornos de las TI',
+    vj:'Videojuegos y Realidad Virtual',
+    ia:'Inteligencia Artificial y Big Data',
+    'smr1-montaje':'Montaje y Mantenimiento de Equipos',
+    'smr1-so-mono':'Sistemas Operativos Monopuesto',
+    'smr1-redes':'Redes Locales',
+    'smr1-ofimatica':'Aplicaciones Ofimáticas',
+    'smr1-fol':'Formación y Orientación Laboral',
+    'smr2-so-red':'Sistemas Operativos en Red',
+    'smr2-seguridad':'Seguridad Informática',
+    'smr2-servicios':'Servicios en Red',
+    'smr2-web':'Aplicaciones Web',
+    'smr2-eie':'Empresa e Iniciativa Emprendedora',
+    'asir1-iso':'Implantación de Sistemas Operativos',
+    'asir1-par':'Planificación y Administración de Redes',
+    'asir1-fhw':'Fundamentos de Hardware',
+    'asir1-gbd':'Gestión de Bases de Datos',
+    'asir1-lmsgi':'Lenguajes de Marcas y SGI',
+    'asir1-fol':'Formación y Orientación Laboral',
+    'asir2-aso':'Administración de Sistemas Operativos',
+    'asir2-sri':'Servicios de Red e Internet',
+    'asir2-iaw':'Implantación de Aplicaciones Web',
+    'asir2-asgbd':'Administración de SGBD',
+    'asir2-sad':'Seguridad y Alta Disponibilidad',
+    'asir2-eie':'Empresa e Iniciativa Emprendedora',
+    'asir2-proyecto':'Proyecto ASIR',
+    'shared1-si':'Sistemas Informáticos',
+    'shared1-bd':'Bases de Datos',
+    'shared1-prog':'Programación',
+    'shared1-lmsgi':'Lenguajes de Marcas y SGI',
+    'shared1-ed':'Entornos de Desarrollo',
+    'shared1-fol':'Formación y Orientación Laboral',
+    'daw2-dwec':'Desarrollo Web en Entorno Cliente',
+    'daw2-dwes':'Desarrollo Web en Entorno Servidor',
+    'daw2-daw':'Despliegue de Aplicaciones Web',
+    'daw2-diw':'Diseño de Interfaces Web',
+    'daw2-eie':'Empresa e Iniciativa Emprendedora',
+    'daw2-proyecto':'Proyecto DAW',
+    'dam2-ad':'Acceso a Datos',
+    'dam2-di':'Desarrollo de Interfaces',
+    'dam2-pmdm':'Programación Multidispositivo',
+    'dam2-psp':'Programación de Servicios y Procesos',
+    'dam2-sge':'Sistemas de Gestión Empresarial',
+    'dam2-eie':'Empresa e Iniciativa Emprendedora',
+    'dam2-proyecto':'Proyecto DAM',
+    'ciber-incidentes':'Incidentes de Ciberseguridad',
+    'ciber-bastionado':'Bastionado de Redes y Sistemas',
+    'ciber-produccion':'Puesta en Producción Segura',
+    'ciber-forense':'Análisis Forense Informático',
+    'ciber-hacking':'Hacking Ético',
+    'ciber-normativa':'Normativa de Ciberseguridad',
+    'vj-motores':'Programación y Motores de Videojuegos',
+    'vj-graficos':'Diseño Gráfico 2D y 3D',
+    'vj-red-ia':'Programación en Red e IA',
+    'vj-realidad-virtual':'Realidad Virtual y Aumentada',
+    'vj-gestion':'Gestión, Publicación y Producción',
+    'ia-modelos':'Modelos de Inteligencia Artificial',
+    'ia-aprendizaje':'Sistemas de Aprendizaje Automático',
+    'ia-programacion':'Programación de IA',
+    'ia-bigdata':'Sistemas de Big Data',
+    'ia-bigdata-aplicado':'Big Data Aplicado',
   }
+};
+
+// ════════════════════════════════════════════════════════════
+// DATOS — la GitHub Action rellena los profs[]
+// ════════════════════════════════════════════════════════════
+const DATOS = [
+  {sec:'gm', cicles:[
+    {id:'smr',key:'smr',abrev:'SMR',abrevSub:null,dual:null,
+     bg:'#FAEEDA',border:'#FAC775',ibg:'#FAC775',ic:'#854F0B',tc:'#633806',tl:'#854F0B',div:'#FAC775',btn:'rgba(250,199,117,0.25)',
+     icon:'M3 6h18M3 12h18M3 18h18',
+     cursos:[
+       {key:'c1',id:'smr1',mods:[
+         {id:'smr1-montaje',profs:[]},{id:'smr1-so-mono',profs:[]},{id:'smr1-redes',profs:[]},
+         {id:'smr1-ofimatica',profs:[]},{id:'smr1-fol',profs:[]},
+       ]},
+       {key:'c2',id:'smr2',mods:[
+         {id:'smr2-so-red',profs:[]},{id:'smr2-seguridad',profs:[]},{id:'smr2-servicios',profs:[]},
+         {id:'smr2-web',profs:[]},{id:'smr2-eie',profs:[]},
+       ]},
+     ]},
+  ]},
+  {sec:'gs', cicles:[
+    {id:'asir',key:'asir',abrev:'ASIR',abrevSub:null,dual:null,
+     bg:'#E1F5EE',border:'#9FE1CB',ibg:'#9FE1CB',ic:'#0F6E56',tc:'#085041',tl:'#0F6E56',div:'#9FE1CB',btn:'rgba(159,225,203,0.25)',
+     icon:'M2 6h20M2 12h20M6 6v12M18 6v12',
+     cursos:[
+       {key:'c1',id:'asir1',mods:[
+         {id:'asir1-iso',profs:[]},{id:'asir1-par',profs:[],topic:'asir1-par'},
+         {id:'asir1-fhw',profs:[]},{id:'asir1-gbd',profs:[]},{id:'asir1-lmsgi',profs:[]},{id:'asir1-fol',profs:[]},
+       ]},
+       {key:'c2',id:'asir2',mods:[
+         {id:'asir2-aso',profs:[]},{id:'asir2-sri',profs:[]},{id:'asir2-iaw',profs:[]},
+         {id:'asir2-asgbd',profs:[]},{id:'asir2-sad',profs:[]},{id:'asir2-eie',profs:[]},{id:'asir2-proyecto',profs:[]},
+       ]},
+     ]},
+    {id:'shared',key:'shared',abrev:'DAW · DAM',abrevSub:null,dual:{b1:'DAW',c1:'#0C447C',bg1:'#B5D4F4',b2:'DAM',c2:'#3C3489',bg2:'#CECBF6'},
+     bg:'#F0EEFF',border:'#C8C4F8',ibg:'#C8C4F8',ic:'#534AB7',tc:'#3C3489',tl:'#534AB7',div:'#C8C4F8',btn:'rgba(200,196,248,0.25)',
+     icon:'M7 8l3 3-3 3M13 14h4',
+     cursos:[
+       {key:'c1',id:'shared1',mods:[
+         {id:'shared1-si',profs:[]},{id:'shared1-bd',profs:[]},{id:'shared1-prog',profs:[]},
+         {id:'shared1-lmsgi',profs:[]},{id:'shared1-ed',profs:[],topic:'shared1-ed'},{id:'shared1-fol',profs:[]},
+       ]},
+     ]},
+    {id:'daw',key:'daw',abrev:'DAW',abrevSub:'DAW · 2n curs | DAW · 2º curso',dual:null,
+     bg:'#E6F1FB',border:'#B5D4F4',ibg:'#B5D4F4',ic:'#185FA5',tc:'#0C447C',tl:'#185FA5',div:'#B5D4F4',btn:'rgba(181,212,244,0.25)',
+     icon:'M7 8l3 3-3 3M13 14h4',
+     cursos:[
+       {key:'c2',id:'daw2',mods:[
+         {id:'daw2-dwec',profs:[],topic:'daw2-dwec'},{id:'daw2-dwes',profs:[]},
+         {id:'daw2-daw',profs:[],topic:'daw2-daw'},{id:'daw2-diw',profs:[]},{id:'daw2-eie',profs:[]},{id:'daw2-proyecto',profs:[]},
+       ]},
+     ]},
+    {id:'dam',key:'dam',abrev:'DAM',abrevSub:'DAM · 2n curs | DAM · 2º curso',dual:null,
+     bg:'#EEEDFE',border:'#CECBF6',ibg:'#CECBF6',ic:'#534AB7',tc:'#3C3489',tl:'#534AB7',div:'#CECBF6',btn:'rgba(206,203,246,0.25)',
+     icon:'M5 2h14a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM12 18h.01M9 7h6M9 11h6',
+     cursos:[
+       {key:'c2',id:'dam2',mods:[
+         {id:'dam2-ad',profs:[]},{id:'dam2-di',profs:[]},{id:'dam2-pmdm',profs:[]},
+         {id:'dam2-psp',profs:[]},{id:'dam2-sge',profs:[]},{id:'dam2-eie',profs:[]},{id:'dam2-proyecto',profs:[]},
+       ]},
+     ]},
+  ]},
+  {sec:'ce', cicles:[
+    {id:'ciber',key:'ciber',abrev:'CE · Màster FP',abrevSub:null,dual:null,
+     bg:'#FCEBEB',border:'#F7C1C1',ibg:'#F7C1C1',ic:'#A32D2D',tc:'#791F1F',tl:'#A32D2D',div:'#F7C1C1',btn:'rgba(247,193,193,0.25)',
+     icon:'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z',
+     cursos:[
+       {key:'cm',id:'ciber1',mods:[
+         {id:'ciber-incidentes',profs:[]},{id:'ciber-bastionado',profs:[]},{id:'ciber-produccion',profs:[]},
+         {id:'ciber-forense',profs:[]},{id:'ciber-hacking',profs:[]},{id:'ciber-normativa',profs:[]},
+       ]},
+     ]},
+    {id:'vj',key:'vj',abrev:'CE · Màster FP',abrevSub:null,dual:null,
+     bg:'#FBEAF0',border:'#F4C0D1',ibg:'#F4C0D1',ic:'#993556',tc:'#72243E',tl:'#993556',div:'#F4C0D1',btn:'rgba(244,192,209,0.25)',
+     icon:'M6 12h4M8 10v4M15 13h.01M18 11h.01M2 6h20v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6z',
+     cursos:[
+       {key:'cm',id:'vj1',mods:[
+         {id:'vj-motores',profs:[]},{id:'vj-graficos',profs:[]},{id:'vj-red-ia',profs:[]},
+         {id:'vj-realidad-virtual',profs:[]},{id:'vj-gestion',profs:[]},
+       ]},
+     ]},
+    {id:'ia',key:'ia',abrev:'CE · Màster FP',abrevSub:null,dual:null,
+     bg:'#EAF3DE',border:'#C0DD97',ibg:'#C0DD97',ic:'#3B6D11',tc:'#27500A',tl:'#3B6D11',div:'#C0DD97',btn:'rgba(192,221,151,0.25)',
+     icon:'M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.46 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.44-1.14M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.46 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.44-1.14',
+     cursos:[
+       {key:'cm',id:'ia1',mods:[
+         {id:'ia-modelos',profs:[]},{id:'ia-aprendizaje',profs:[]},{id:'ia-programacion',profs:[]},
+         {id:'ia-bigdata',profs:[]},{id:'ia-bigdata-aplicado',profs:[]},
+       ]},
+     ]},
+  ]},
 ];
 
-// ─────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════
+// ESTADO
+// ════════════════════════════════════════════════════════════
+let lang = 'ca';
+function t(k){ return T[lang][k] || k; }
+
+// ════════════════════════════════════════════════════════════
 // RENDER
-// ─────────────────────────────────────────────
-function initials(user) {
-  const parts = user.replace('.', ' ').split(' ');
-  return parts.map(p => p[0]?.toUpperCase() || '').join('').slice(0, 2);
+// ════════════════════════════════════════════════════════════
+function renderMod(m, c){
+  const name = t(m.id);
+  const hasMat = m.profs && m.profs.length > 0;
+  const url  = hasMat ? m.profs[0].url : null;
+  const badge = hasMat ? `<span class="badge-mat" style="background:rgba(0,0,0,0.08);color:${c.tc}">● Material</span>` : '';
+  const tag  = url ? 'a' : 'span';
+  const href = url ? `href="${url}" target="_blank" rel="noopener"` : '';
+  return `<${tag} ${href} class="mod-item" style="color:${c.tc}" data-id="${m.id}" data-search="${name.toLowerCase()} ${m.id}">
+    <span class="mod-left"><span class="mod-name-txt">${name}</span>${badge}</span>
+    <span style="color:${c.tl};flex-shrink:0;margin-left:4px">→</span>
+  </${tag}>`;
 }
 
-function renderChip(prof) {
-  return `<a class="chip" href="${prof.url}" target="_blank" rel="noopener">
-    <div class="chip-av">${initials(prof.user)}</div>
-    ${prof.user}
-  </a>`;
-}
-
-function renderMod(mod) {
-  const hasMat = mod.profs.length > 0;
-  const badge = hasMat
-    ? `<span class="badge badge-si">● Material</span>`
-    : `<span class="badge badge-no">Sense material</span>`;
-  const chips = mod.profs.map(renderChip).join('');
-  return `<div class="mod" data-search="${mod.codi} ${mod.abrev} ${mod.nom} ${mod.profs.map(p=>p.user).join(' ')}">
-    <div class="mod-top">
-      <span class="mod-code">${mod.codi} · ${mod.abrev}</span>
-      ${badge}
-    </div>
-    <div class="mod-name">${mod.nom}</div>
-    <div class="prof-chips">${chips}</div>
+function renderCurso(cu, c, idx){
+  const mods = cu.mods.map(m=>renderMod(m,c)).join('');
+  const open = idx===0;
+  return `<button class="curso-btn" style="background:${c.btn};color:${c.tc}" onclick="tog('${cu.id}','a${cu.id}')">
+    <span data-ckey="${cu.key}">${t(cu.key)}</span>
+    <span class="arrow${open?' open':''}" id="a${cu.id}">→</span>
+  </button>
+  <div class="modulos${open?' open':''}" id="${cu.id}">
+    <div class="modulos-inner">${mods}</div>
   </div>`;
 }
 
-function renderCurs(curs, isFirst) {
-  const mods = curs.mods.map(renderMod).join('');
-  const nMat = curs.mods.filter(m => m.profs.length > 0).length;
-  return `<div class="curs${isFirst ? ' open' : ''}" id="${curs.id}">
-    <div class="curs-hdr" onclick="toggleCurs(this)">
-      <span class="curs-label">${curs.label}</span>
-      <div class="curs-meta">
-        <span>${curs.mods.length} mòduls · ${nMat} amb material</span>
-        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
+function renderCicle(c){
+  const name = t(c.key);
+  const abrevSub = c.abrevSub ? (lang==='ca' ? c.abrevSub.split('|')[0].trim() : c.abrevSub.split('|')[1].trim()) : c.abrev;
+  const dualHtml = c.dual
+    ? `<div class="dual-badge"><span class="dbadge" style="background:${c.dual.bg1};color:${c.dual.c1}">${c.dual.b1}</span><span class="dbadge" style="background:${c.dual.bg2};color:${c.dual.c2}">${c.dual.b2}</span></div>`
+    : '';
+  const cursos = c.cursos.map((cu,i)=>renderCurso(cu,c,i)).join('');
+  const totalMods = c.cursos.reduce((s,cu)=>s+cu.mods.length,0);
+  const totalMat  = c.cursos.reduce((s,cu)=>s+cu.mods.filter(m=>m.profs&&m.profs.length>0).length,0);
+  return `<div class="card" style="background:${c.bg};border-color:${c.border}" data-cicle="${c.id}" data-search="${name.toLowerCase()} ${c.abrev.toLowerCase()}" data-mods="${totalMods}" data-mat="${totalMat}">
+    <div class="icon-box" style="background:${c.ibg};color:${c.ic}">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${c.icon}"/></svg>
     </div>
-    <div class="mods-grid">${mods}</div>
+    ${dualHtml}
+    <p class="card-name" style="color:${c.tc}" data-namekey="${c.key}">${name}</p>
+    <p class="card-abrev" style="color:${c.tl}" data-abrev="${c.id}">${abrevSub}</p>
+    <div class="card-divider" style="border-top-color:${c.div}">${cursos}</div>
   </div>`;
 }
 
-function renderCicle(cicle, isFirst) {
-  const totalMods = cicle.cursos.reduce((s, c) => s + c.mods.length, 0);
-  const totalMat  = cicle.cursos.reduce((s, c) => s + c.mods.filter(m => m.profs.length > 0).length, 0);
-  const cursos = cicle.cursos.map((c, i) => renderCurs(c, i === 0)).join('');
-  return `<div class="ciclo${isFirst ? ' open' : ''}" id="ciclo-${cicle.id}">
-    <div class="ciclo-hdr" onclick="toggleCiclo(this)">
-      <div class="ciclo-left">
-        <span class="ciclo-pill ${cicle.pillClass}">${cicle.pill}</span>
-        <span class="ciclo-name">${cicle.nom}</span>
-      </div>
-      <div class="ciclo-right">
-        <span class="ciclo-meta">${totalMods} mòduls · ${totalMat} amb material</span>
-        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-    </div>
-    <div class="ciclo-body">${cursos}</div>
-  </div>`;
+function renderSection(s){
+  const cicles = s.cicles.map(renderCicle).join('');
+  return `<p class="section-label" data-seckey="${s.sec}">${t(s.sec)}</p>
+  <div class="cycle-grid" id="g-${s.sec}">${cicles}</div>`;
 }
 
-function renderAll() {
-  const container = document.getElementById('cicles-container');
-  container.innerHTML = CICLES.map((c, i) => renderCicle(c, i === 0)).join('');
-  document.getElementById('sync-date').textContent = SYNC_DATE;
-
-  const totalMods = CICLES.reduce((s, c) => s + c.cursos.reduce((s2, cu) => s2 + cu.mods.length, 0), 0);
-  const totalMat  = CICLES.reduce((s, c) => s + c.cursos.reduce((s2, cu) => s2 + cu.mods.filter(m => m.profs.length > 0).length, 0), 0);
-  document.getElementById('st-cicles').textContent = CICLES.length;
-  document.getElementById('st-mods').textContent = totalMods;
-  document.getElementById('st-mat').textContent = totalMat;
+function renderAll(){
+  document.getElementById('portal').innerHTML = DATOS.map(renderSection).join('');
+  updateStats();
 }
 
-// ─────────────────────────────────────────────
+function updateStats(){
+  let mods=0,mat=0;
+  DATOS.forEach(s=>s.cicles.forEach(c=>c.cursos.forEach(cu=>{
+    mods+=cu.mods.length;
+    mat+=cu.mods.filter(m=>m.profs&&m.profs.length>0).length;
+  })));
+  document.getElementById('sl-n-mods').textContent=mods;
+  document.getElementById('sl-n-mat').textContent=mat;
+}
+
+// ════════════════════════════════════════════════════════════
 // TOGGLE
-// ─────────────────────────────────────────────
-function toggleCiclo(hdr) { hdr.closest('.ciclo').classList.toggle('open'); }
-function toggleCurs(hdr)  { hdr.closest('.curs').classList.toggle('open'); }
+// ════════════════════════════════════════════════════════════
+function tog(id,aid){
+  const el=document.getElementById(id);
+  const ar=document.getElementById(aid);
+  if(el){el.classList.toggle('open');}
+  if(ar){ar.classList.toggle('open');}
+}
 
-// ─────────────────────────────────────────────
+// ════════════════════════════════════════════════════════════
+// IDIOMA
+// ════════════════════════════════════════════════════════════
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lang-opt').forEach(b=>{
+    b.classList.toggle('active',(l==='ca'&&b.textContent==='VAL')||(l==='es'&&b.textContent==='CAS'));
+  });
+  document.getElementById('brand-name').textContent=t('brandName');
+  document.getElementById('brand-sub').textContent=t('brandSub');
+  document.getElementById('sl-cicles').textContent=t('cicles');
+  document.getElementById('sl-mods').textContent=t('mods');
+  document.getElementById('sl-mat').textContent=t('mat');
+  document.getElementById('sync-txt').textContent=t('sync');
+  document.getElementById('q').placeholder=t('ph');
+  document.getElementById('empty').textContent=t('empty');
+  document.querySelectorAll('[data-seckey]').forEach(el=>el.textContent=t(el.dataset.seckey));
+  document.querySelectorAll('[data-namekey]').forEach(el=>el.textContent=t(el.dataset.namekey));
+  document.querySelectorAll('[data-abrev]').forEach(el=>{
+    const cid=el.dataset.abrev;
+    const c=DATOS.flatMap(s=>s.cicles).find(x=>x.id===cid);
+    if(c&&c.abrevSub) el.textContent=(l==='ca'?c.abrevSub.split('|')[0]:c.abrevSub.split('|')[1]).trim();
+  });
+  document.querySelectorAll('[data-ckey]').forEach(el=>el.textContent=t(el.dataset.ckey));
+  document.querySelectorAll('.mod-item').forEach(el=>{
+    const mid=el.dataset.id;
+    if(mid){
+      const nm=t(mid);
+      el.querySelector('.mod-name-txt').textContent=nm;
+      el.dataset.search=nm.toLowerCase()+' '+mid;
+    }
+  });
+}
+
+// ════════════════════════════════════════════════════════════
 // SEARCH
-// ─────────────────────────────────────────────
-document.addEventListener('DOMContentLoaded', () => {
+// ════════════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',()=>{
   renderAll();
-
-  document.getElementById('q').addEventListener('input', function () {
-    const q = this.value.toLowerCase().trim();
-    let anyVisible = false;
-
-    document.querySelectorAll('.mod').forEach(m => {
-      const match = !q || m.dataset.search.toLowerCase().includes(q);
-      m.style.display = match ? '' : 'none';
+  document.getElementById('q').addEventListener('input',function(){
+    const q=this.value.toLowerCase().trim();
+    let any=false;
+    document.querySelectorAll('.mod-item').forEach(m=>{
+      m.style.display=(!q||m.dataset.search.includes(q))?'':'none';
     });
-
-    document.querySelectorAll('.curs').forEach(b => {
-      const vis = [...b.querySelectorAll('.mod')].some(m => m.style.display !== 'none');
-      b.style.display = vis ? '' : 'none';
-      if (q && vis) b.classList.add('open');
-      if (vis) anyVisible = true;
+    document.querySelectorAll('.modulos').forEach(ml=>{
+      const vis=[...ml.querySelectorAll('.mod-item')].some(m=>m.style.display!=='none');
+      if(q&&vis)ml.classList.add('open');
     });
-
-    document.querySelectorAll('.ciclo').forEach(w => {
-      const vis = [...w.querySelectorAll('.curs')].some(c => c.style.display !== 'none');
-      w.style.display = vis ? '' : 'none';
-      if (q && vis) w.classList.add('open');
+    document.querySelectorAll('[data-cicle]').forEach(card=>{
+      const vis=card.dataset.search.includes(q)||[...card.querySelectorAll('.mod-item')].some(m=>m.style.display!=='none');
+      card.style.display=(!q||vis)?'':'none';
+      if(vis)any=true;
     });
-
-    document.getElementById('empty').style.display = anyVisible ? 'none' : 'block';
+    document.querySelectorAll('.cycle-grid').forEach(g=>{
+      const vis=[...g.querySelectorAll('[data-cicle]')].some(c=>c.style.display!=='none');
+      g.style.display=vis?'':'none';
+      if(g.previousElementSibling)g.previousElementSibling.style.display=vis?'':'none';
+    });
+    document.getElementById('empty').style.display=(!q||any)?'none':'block';
   });
 });
 </script>
