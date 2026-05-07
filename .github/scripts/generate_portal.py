@@ -263,6 +263,10 @@ def render_cicle(cicle_id, data, is_first):
 
 def inject(html, data):
     today = date.today().isoformat()
+    print("  ESTRUCTURA keys:", list(ESTRUCTURA.keys()))
+    for cicle_id, cicle in ESTRUCTURA.items():
+        for curs_id, c in cicle["cursos"].items():
+            print(f"  cicle={cicle_id} curs={curs_id} mods={list(c['mods'].keys())}")
     html = re.sub(r'const SYNC_DATE = "[^"]*"', f'const SYNC_DATE = "{today}"', html)
     for cicle_id, cicle in ESTRUCTURA.items():
         for curs_id, c in cicle["cursos"].items():
