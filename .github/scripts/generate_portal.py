@@ -264,10 +264,8 @@ def render_cicle(cicle_id, data, is_first):
 
 def inject(html, data):
     today = date.today().isoformat()
-
     # Actualizar fecha de sync
     html = re.sub(r'const SYNC_DATE = "[^"]*"', f'const SYNC_DATE = "{today}"', html)
-
     # Actualizar profs[] para cada módulo
     for cicle_id, cicle in ESTRUCTURA.items():
         for curs_id, c in cicle["cursos"].items():
@@ -275,19 +273,17 @@ def inject(html, data):
                 profs = data[cicle_id][curs_id][mod_id]
                 if profs:
                     profs_js = ','.join(
-                        f'{{user:"{p["user"]}",url:"{p["url"]}"}}'
+                        f"{{user:'{p['user']}',url:'{p['url']}'}}"
                         for p in profs
                     )
                 else:
                     profs_js = ''
-
                 # Sustituir profs:[] o profs:[{...}] por los nuevos datos
                 html = re.sub(
-                    rf'(\{{id:"{re.escape(mod_id)}",[^}}]*profs:)\[[^\]]*\]',
-                    rf'\g<1>[{profs_js}]',
+                    rf"(\{{id:'{re.escape(mod_id)}',[^}}]*profs:)\[[^\]]*\]",
+                    rf"\g<1>[{profs_js}]",
                     html
                 )
-
     return html
 
 # ── MAIN ──────────────────────────────────────────────────────────────────────
