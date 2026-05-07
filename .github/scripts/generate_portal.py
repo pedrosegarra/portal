@@ -107,7 +107,7 @@ def get_all_repos():
     repos = []
     page = 1
     while True:
-        url = f"https://api.github.com/orgs/{ORG}/repos?type=public&per_page=100&page={page}"
+        url = f"https://api.github.com/users/{ORG}/repos?type=public&per_page=100&page={page}"
         data = gh_get(url)
         if not data:
             break
