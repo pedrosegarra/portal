@@ -263,9 +263,7 @@ def render_cicle(cicle_id, data, is_first):
 
 def inject(html, data):
     today = date.today().isoformat()
-    # Actualizar fecha de sync
     html = re.sub(r'const SYNC_DATE = "[^"]*"', f'const SYNC_DATE = "{today}"', html)
-    # Actualizar profs[] para cada módulo
     for cicle_id, cicle in ESTRUCTURA.items():
         for curs_id, c in cicle["cursos"].items():
             for mod_id in c["mods"]:
@@ -278,10 +276,18 @@ def inject(html, data):
                     else:
                         print(f"  NO ENCONTRADO: {mod_id}")
                 if profs:
-                    profs_js = ','.join(
-                        f"{{user:'{p['user']}',url:'{p['url']}'}}"
-                        for p in prof
-
+                    parts = []
+                    for p in profs:
+                        parts.append("{user:'" + p['user'] + "',url:'" + p['url'] + "'}")
+                    profs_js = ','.join(parts)
+                else:
+                    profs_js = ''
+                html = re.sub(
+                    rf"(\{{id:'{re.escape(mod_id)}',[^}}]*profs:)\[[^\]]*\]",
+                    rf"\g<1>[{profs_js}]",
+                    html
+                )
+    return html
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 def main():
     print(f"=== Generant portal per a org: {ORG} ===")
