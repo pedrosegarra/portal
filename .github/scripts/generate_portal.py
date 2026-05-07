@@ -260,42 +260,28 @@ def render_cicle(cicle_id, data, is_first):
     )
 
 # ── INJECT INTO HTML ──────────────────────────────────────────────────────────
+
 def inject(html, data):
     today = date.today().isoformat()
 
-    # Substitueix SYNC_DATE
+    # Actualizar fecha de sync
     html = re.sub(r'const SYNC_DATE = "[^"]*"', f'const SYNC_DATE = "{today}"', html)
 
-    # Genera el bloc de cicles
-    cicles_html = ''.join(
-        render_cicle(cicle_id, data, i == 0)
-        for i, cicle_id in enumerate(ESTRUCTURA)
-    )
-
-    # Calcula stats globals
-    total_mods = sum(
-        len(c["mods"])
-        for cicle in ESTRUCTURA.values()
-        for c in cicle["cursos"].values()
-    )
-    total_mat = sum(
-        sum(1 for m in c["mods"] if data[cicle_id][curs_id][m])
-        for cicle_id, cicle in ESTRUCTURA.items()
-        for curs_id, c in cicle["cursos"].items()
-    )
-
-    # Substitueix el bloc de dades d'exemple per dades reals
-    # Marca d'inici i fi al HTML
-    html = re.sub(
-        r'(<div id="cicles-container">)[^<]*(</div>)',
-        lambda m: m.group(1) + cicles_html + m.group(2),
-        html, flags=re.DOTALL
-    )
-
-    # Actualitza stats al JS (st-cicles, st-mods, st-mat via textContent)
-    # Ho deixem al JS que ja els calcula des de les dades renderitzades
+    # Construir nuevo array DATOS con profs reales
+    for cicle_id, cicle in ESTRUCTURA.items():
+        for curs_id, c in cicle["cursos"].items():
+            for mod_id in c["mods"]:
+                profs = data[cicle_id][curs_id][mod_id]
+                has_mat = len(profs) > 0
+                # Actualizar hasMat en el JS
+                html = re.sub(
+                    rf'(id:"{mod_id}",url:"[^"]*",hasMat:)(?:true|false)',
+                    rf'\g<1>{"true" if has_mat else "false"}',
+                    html
+                )
 
     return html
+
 
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 def main():
