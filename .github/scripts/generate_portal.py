@@ -263,22 +263,12 @@ def render_cicle(cicle_id, data, is_first):
 
 def inject(html, data):
     today = date.today().isoformat()
-    print("  ESTRUCTURA keys:", list(ESTRUCTURA.keys()))
-    for cicle_id, cicle in ESTRUCTURA.items():
-        for curs_id, c in cicle["cursos"].items():
-            print(f"  cicle={cicle_id} curs={curs_id} mods={list(c['mods'].keys())}")
     html = re.sub(r'const SYNC_DATE = "[^"]*"', f'const SYNC_DATE = "{today}"', html)
     for cicle_id, cicle in ESTRUCTURA.items():
         for curs_id, c in cicle["cursos"].items():
             for mod_id in c["mods"]:
                 profs = data[cicle_id][curs_id][mod_id]
-                if mod_id == 'asir1-par':
-                    test = re.search(rf"id:'{re.escape(mod_id)}'", html)
-                    if test:
-                        print(f"  ENCONTRADO en pos {test.start()}")
-                        print(f"  >>>{html[test.start():test.start()+100]}<<<")
-                    else:
-                        print(f"  NO ENCONTRADO: {mod_id}")
+                full_mod_id = f"{cicle_id}{curs_id}-{mod_id}"
                 if profs:
                     parts = []
                     for p in profs:
@@ -287,11 +277,12 @@ def inject(html, data):
                 else:
                     profs_js = ''
                 html = re.sub(
-                    rf"(\{{id:'{re.escape(mod_id)}',[^}}]*profs:)\[[^\]]*\]",
+                    rf"(\{{id:'{re.escape(full_mod_id)}',[^}}]*profs:)\[[^\]]*\]",
                     rf"\g<1>[{profs_js}]",
                     html
                 )
     return html
+
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 def main():
     print(f"=== Generant portal per a org: {ORG} ===")
